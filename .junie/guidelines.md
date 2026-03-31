@@ -31,18 +31,12 @@ The server can be configured via environment variables (often loaded from a `.en
 - `config.http.json`: Configuration for HTTP transport.
 - `config.docker.json`: Configuration for Docker execution.
 
-Key environment variables:
-- `SERVER`: Your Tableau Server URL.
-- `SITE_NAME`: The Tableau site name.
-- `TRANSPORT`: Communication protocol: `stdio` (default) or `http`.
-- `AUTH`: Authentication method: `pat` (default), `oauth`, `uat`, `direct-trust`.
-
 #### Authentication Methods
-Tableau MCP supports several authentication methods, configured via the `AUTH` environment variable:
+Tableau MCP supports several authentication methods, configured via the `AUTH` environment variables:
 - `pat` (Default): Personal Access Token. Requires `PAT_NAME` and `PAT_VALUE`.
 - `oauth`: OAuth 2.0. Requires additional OAUTH_* variables.
-- `uat`: User Access Token. Requires `UAT_TENANT_ID`, `UAT_ISSUER`, `UAT_PRIVATE_KEY` (or `UAT_PRIVATE_KEY_PATH`), `UAT_KEY_ID`.
-- `direct-trust`: Connected App Direct Trust. Requires `CONNECTED_APP_CLIENT_ID`, `CONNECTED_APP_SECRET_ID`, `CONNECTED_APP_SECRET_VALUE`.
+- `uat`: User Access Token.
+- `direct-trust`: Connected App Direct Trust.
 
 #### Overridable Environment Variables
 These variables can be used to customize the server's behavior and the available tools:
