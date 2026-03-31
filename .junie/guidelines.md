@@ -34,8 +34,51 @@ The server can be configured via environment variables (often loaded from a `.en
 Key environment variables:
 - `SERVER`: Your Tableau Server URL.
 - `SITE_NAME`: The Tableau site name.
-- `PAT_NAME`: Personal Access Token name.
-- `PAT_VALUE`: Personal Access Token value.
+- `TRANSPORT`: Communication protocol: `stdio` (default) or `http`.
+- `AUTH`: Authentication method: `pat` (default), `oauth`, `uat`, `direct-trust`.
+
+#### Authentication Methods
+Tableau MCP supports several authentication methods, configured via the `AUTH` environment variable:
+- `pat` (Default): Personal Access Token. Requires `PAT_NAME` and `PAT_VALUE`.
+- `oauth`: OAuth 2.0. Requires additional OAUTH_* variables.
+- `uat`: User Access Token. Requires `UAT_TENANT_ID`, `UAT_ISSUER`, `UAT_PRIVATE_KEY` (or `UAT_PRIVATE_KEY_PATH`), `UAT_KEY_ID`.
+- `direct-trust`: Connected App Direct Trust. Requires `CONNECTED_APP_CLIENT_ID`, `CONNECTED_APP_SECRET_ID`, `CONNECTED_APP_SECRET_VALUE`.
+
+#### Overridable Environment Variables
+These variables can be used to customize the server's behavior and the available tools:
+
+**Tool Filtering:**
+- `INCLUDE_TOOLS`: Comma-separated list of tool names or tool groups to include.
+- `EXCLUDE_TOOLS`: Comma-separated list of tool names or tool groups to exclude.
+  *(Note: Cannot use both INCLUDE and EXCLUDE simultaneously)*
+
+**Bounded Context (Data Filtering):**
+- `INCLUDE_PROJECT_IDS`: Comma-separated list of Tableau project LUIDs.
+- `INCLUDE_DATASOURCE_IDS`: Comma-separated list of Tableau datasource LUIDs.
+- `INCLUDE_WORKBOOK_IDS`: Comma-separated list of Tableau workbook LUIDs.
+- `INCLUDE_TAGS`: Comma-separated list of tags.
+  *(When set, tools will only return resources that match these criteria.)*
+
+**Result Limits:**
+- `MAX_RESULT_LIMIT`: Global limit for the number of items returned by list tools.
+- `MAX_RESULT_LIMITS`: Tool-specific limits (e.g., `list-views:50,workbook:20`).
+
+**Other Overrides:**
+- `DISABLE_QUERY_DATASOURCE_VALIDATION_REQUESTS`: Set to `true` to skip validation before querying.
+- `DISABLE_METADATA_API_REQUESTS`: Set to `true` to disable Metadata API calls.
+
+### Tool Names and Groups
+**Tool Groups:**
+- `datasource`: `list-datasources`, `get-datasource-metadata`, `query-datasource`
+- `workbook`: `list-workbooks`, `get-workbook`
+- `view`: `list-views`, `get-view-data`, `get-view-image`
+- `pulse`: `list-all-pulse-metric-definitions`, `list-pulse-metric-definitions-from-definition-ids`, `list-pulse-metrics-from-metric-definition-id`, `list-pulse-metrics-from-metric-ids`, `list-pulse-metric-subscriptions`, `generate-pulse-metric-value-insight-bundle`, `generate-pulse-insight-brief`
+- `content-exploration`: `search-content`
+
+#### Advanced Filtering (`list-views`)
+The `list-views` tool supports advanced filtering using `field:operator:value` syntax.
+- **Operators:** `eq`, `in`, `gt`, `gte`, `lt`, `lte`.
+- **Example:** `name:eq:Overview,projectName:eq:Finance`.
 
 ## Testing
 
